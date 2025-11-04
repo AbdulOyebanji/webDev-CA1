@@ -20,11 +20,10 @@ public class userReg extends HttpServlet {
 public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, NullPointerException {
 
-	String username = request.getParameter("Username");
-	String password = request.getParameter("Password");
+	String userName = request.getParameter("username");
+	String password = request.getParameter("password");
 	String rePassword = request.getParameter("rePassword");
-
-	int credits = 500;
+     int credits = 500;
 
 	
 
@@ -33,37 +32,53 @@ public void doGet(HttpServletRequest request, HttpServletResponse response)
 			Connection connection = null;
 			try {
 				connection = DriverManager.getConnection(
-						"jdbc:mysql://localhost:3306/onlineusers?serverTimezone=UTC");
+						"jdbc:mysql://localhost:3306/onlineusers?serverTimezone=UTC", "root", "root");
+				// condition
 				
-				
-				if (password != null && rePassword!= null && password.equals(rePassword)) {
-					
+				if (password != null && rePassword!= null && password.equals(rePassword)) { 
+				try{
+					// gets the users info
 					PreparedStatement storePlayerInfo = connection.prepareStatement(
-							"INSERT into PlayerInfo "
-							+ "(Username, Password,credit)" +" VALUES (?, ?,?)");
+							"INSERT into playerInfo (username, password) VALUES (?, ?)");
 							//pass in the values as parameters
-					storePlayerInfo.setString(1, username);
+					storePlayerInfo.setString(1, userName);
 					storePlayerInfo.setString(2, password);
-					storePlayerInfo.setInt(3, 500 );
+					
 					int rowsUpdated = storePlayerInfo.executeUpdate();
 					storePlayerInfo.close();
+					
+						if (rowsUpdated > 0 ) {
+						
+						System.out.println("User Registered: " + userName);
+					}
+						else {
+					    System.out.println("No rows inserted");
+					}
+						
 					response.sendRedirect("Login.html");
-					return;
+					return; 
+					} catch (SQLException e1) {
+			            e1.printStackTrace();
+			        }
 				
 				}else {
 					response.setContentType("text/html");
 					PrintWriter out1 = response.getWriter();
-					out1.println("<html><head><title>Response Page</title></head><body> Passwords did not match </body><html>");
+					out1.println("<html><head><title>Response Page</title></head>"
+							+ "<body> Passwords did not match </body><html>");
 					return;
 					}
+				
 
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+}
+}
 			
 			
 	
-}}
+
 
 
