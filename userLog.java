@@ -12,17 +12,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-// This servlet handles user login
-@WebServlet("/LoginServlet")
+
+
 public class userLog extends HttpServlet {
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         // Get the username and password from the Login form
-        String username = request.getParameter("Username");
-        String password = request.getParameter("Password");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
 
         // Connect to the database
         Connection connection = null;
